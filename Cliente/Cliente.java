@@ -18,6 +18,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,11 +35,30 @@ private ResultSet rs;
     public Cliente() {
         initComponents();
         Mostrardatos();
+        
      
         this.setLocationRelativeTo(null); //Poner el form en el centro
          
          Border panel =BorderFactory.createMatteBorder(5, 5, 4, 4,Color.black);
          jPanel1.setBorder(panel);
+         Jengi.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(Jengi.getSelectedRow() != -1)
+            {
+                int fila = Jengi.getSelectedRow();
+                jTextField_id.setText(Jengi.getValueAt(fila, 0).toString());
+                jTextField_nombre.setText(Jengi.getValueAt(fila, 1).toString());
+                jTextField_apellidos.setText(Jengi.getValueAt(fila, 2).toString());
+                jTextField_direccion.setText(Jengi.getValueAt(fila, 3).toString());
+                jTextField_telefono.setText(Jengi.getValueAt(fila, 4).toString());
+                jTextField_fecha.setText(Jengi.getValueAt(fila, 5).toString());
+                
+               }
+            }
+    });
+
     }
     
     void Mostrardatos(){
@@ -109,6 +130,8 @@ private ResultSet rs;
         jTextField_fecha = new javax.swing.JTextField();
         jButton_volver = new javax.swing.JButton();
         jButton_modificar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField_id = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -135,6 +158,7 @@ private ResultSet rs;
             }
         });
 
+        Jengi.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Jengi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -161,17 +185,27 @@ private ResultSet rs;
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("Nombre:");
 
+        jTextField_nombre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Apellidos: ");
+
+        jTextField_apellidos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("Dirección:");
 
+        jTextField_direccion.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("Telefono:");
 
+        jTextField_telefono.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Fecha Nacimiento:");
+
+        jTextField_fecha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         jButton_volver.setBackground(new java.awt.Color(192, 57, 43));
         jButton_volver.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -193,6 +227,16 @@ private ResultSet rs;
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setText("ID");
+
+        jTextField_id.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jTextField_id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField_idActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -209,7 +253,11 @@ private ResultSet rs;
                 .addComponent(jScrollPane2)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(168, 168, 168)
+                .addGap(48, 48, 48)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jLabel6)
@@ -252,7 +300,9 @@ private ResultSet rs;
                     .addComponent(jLabel2)
                     .addComponent(jTextField_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField_apellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_apellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -267,7 +317,7 @@ private ResultSet rs;
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton_volver, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                    .addComponent(jButton_volver, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                     .addComponent(jButton_modificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(19, 19, 19))
         );
@@ -308,7 +358,6 @@ private ResultSet rs;
     private void Mouseclicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Mouseclicked
        PreparedStatement cs;
         ResultSet rs;
-        Cargardatos();
         int filaPulsada;
         filaPulsada =Jengi.getSelectedRow();
         if(filaPulsada>=0){
@@ -336,12 +385,12 @@ private ResultSet rs;
     }//GEN-LAST:event_Mouseclicked
 
     private void jButton_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modificarActionPerformed
+    String id= jTextField_id.getText();
     String nomb = jTextField_nombre.getText();
     String apell = jTextField_apellidos.getText();
     String direccion = jTextField_direccion.getText();
     String telefono = jTextField_telefono.getText();
     String fecha = jTextField_fecha.getText();
-    Cargardatos();
     
     if(veryfiel()){  
        
@@ -349,7 +398,7 @@ private ResultSet rs;
         String SQL = ("UPDATE cliente"+
                 
                       " SET nombre='"+nomb+"', apellidos='"+apell+"', direccion='"+direccion+"', telefono='"+telefono+"',fechanac='"+fecha+"'" +
-                      " WHERE idcliente=?;");
+                      " WHERE idcliente='"+id+"';");
         
         try {
             Statement estatuto = Database.getConexion().createStatement();
@@ -368,6 +417,10 @@ private ResultSet rs;
 
     }//GEN-LAST:event_jButton_modificarActionPerformed
 
+    private void jTextField_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_idActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField_idActionPerformed
+
     void Cargardatos(/*int idempleado*/) {
     PreparedStatement cs;
         ResultSet rs;
@@ -378,6 +431,7 @@ private ResultSet rs;
                 rs=cs.executeQuery();
                 if(rs.next()){
                    //cs.setInt(1,idempleado);
+                   jTextField_id.setText(rs.getString(0));
                    jTextField_nombre.setText(rs.getString(1));
                    jTextField_apellidos.setText(rs.getString(2));
                    jTextField_direccion.setText(rs.getString(3));
@@ -449,6 +503,7 @@ private ResultSet rs;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabelcerrar;
     private javax.swing.JLabel jLabelmin;
     private javax.swing.JPanel jPanel1;
@@ -456,6 +511,7 @@ private ResultSet rs;
     private javax.swing.JTextField jTextField_apellidos;
     private javax.swing.JTextField jTextField_direccion;
     private javax.swing.JTextField jTextField_fecha;
+    private javax.swing.JTextField jTextField_id;
     private javax.swing.JTextField jTextField_nombre;
     private javax.swing.JTextField jTextField_telefono;
     // End of variables declaration//GEN-END:variables

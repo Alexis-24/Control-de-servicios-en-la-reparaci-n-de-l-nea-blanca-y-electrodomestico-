@@ -18,6 +18,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -38,7 +40,25 @@ public class Refacciones extends javax.swing.JFrame {
          
          Border panel =BorderFactory.createMatteBorder(5, 5, 4, 4,Color.black);
          jPanel1.setBorder(panel);
+         
+          Jengi.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(Jengi.getSelectedRow() != -1)
+            {
+                int fila = Jengi.getSelectedRow();
+                jTextField_id.setText(Jengi.getValueAt(fila, 0).toString());
+                jTextField_mod.setText(Jengi.getValueAt(fila, 1).toString());
+                jTextField_desc.setText(Jengi.getValueAt(fila, 2).toString());
+                jTextField_stock.setText(Jengi.getValueAt(fila, 3).toString());
+                jTextField_precio.setText(Jengi.getValueAt(fila, 4).toString());
+                
+               }
+            }
+    });
     }
+    
 
     void Mostrardatos(){
         QueryTableBusqueda("SELECT * FROM public.refaccion\n" +
@@ -101,6 +121,8 @@ public class Refacciones extends javax.swing.JFrame {
         jTextField_desc = new javax.swing.JTextField();
         jTextField_stock = new javax.swing.JTextField();
         jTextField_precio = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField_id = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -188,6 +210,15 @@ public class Refacciones extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setText("Id");
+
+        jTextField_id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField_idActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -210,7 +241,11 @@ public class Refacciones extends javax.swing.JFrame {
                 .addComponent(jButton_modificar)
                 .addGap(258, 258, 258))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(191, 191, 191)
+                .addGap(107, 107, 107)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,7 +271,9 @@ public class Refacciones extends javax.swing.JFrame {
                 .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField_mod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_mod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -286,16 +323,15 @@ public class Refacciones extends javax.swing.JFrame {
 
     private void JengiMouseclicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JengiMouseclicked
         PreparedStatement cs;
-        ResultSet rs;
-        Cargardatos();
+        ResultSet rs;;
         int filaPulsada;
         filaPulsada =Jengi.getSelectedRow();
         if(filaPulsada>=0){
             //int identificador=(int)dtm.getValueAt(filaPulsada,0);
             try{
                 System.err.println(dtm.getValueAt(filaPulsada,0));
-                cs=Database.getConexion().prepareStatement("SELECT idcliente FROM cliente WHERE idcliente = "+dtm.getValueAt(filaPulsada,0)+";");
-                System.out.println("SELECT idcliente FROM cliente WHERE idcliente = "+dtm.getValueAt(filaPulsada,0)+";");
+                cs=Database.getConexion().prepareStatement("SELECT idrefaccion FROM refaccion WHERE idrefaccion = "+dtm.getValueAt(filaPulsada,0)+";");
+                System.out.println("SELECT idrefaccion FROM refaccion WHERE idrefaccion = "+dtm.getValueAt(filaPulsada,0)+";");
                 //cs.setInt(1,identificador);
                 //String codigo=(String)dtm.getValueAt(filaPulsada, 0);
                 //codigo=idempleado;
@@ -324,17 +360,17 @@ public class Refacciones extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_volverActionPerformed
 
     private void jButton_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modificarActionPerformed
+        String id= jTextField_id.getText();
         String modelo = jTextField_mod.getText();
         String desc = jTextField_desc.getText();
         String stock = jTextField_stock.getText();
         String precio = jTextField_precio.getText();
-        
-        Cargardatos();
+       
 
         if(veryfiel()){
 
             String SQL = ("UPDATE refaccion"+
-                " SET modelo='"+modelo+"', descrip='"+desc+"', stock='"+stock+"', precio='"+precio+"',"+ "WHERE idcliente=?;");
+                " SET modelo='"+modelo+"', descrip='"+desc+"', stock='"+stock+"', precio='"+precio+"'"+ " WHERE idrefaccion='"+id+"'");
 
             try {
                 Statement estatuto = Database.getConexion().createStatement();
@@ -367,6 +403,10 @@ public boolean veryfiel(){//Metodo que verifica que no haya campos
     private void jTextField_stockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_stockActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField_stockActionPerformed
+
+    private void jTextField_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_idActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField_idActionPerformed
 
     /**
      * @param args the command line arguments
@@ -412,11 +452,13 @@ public boolean veryfiel(){//Metodo que verifica que no haya campos
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelcerrar;
     private javax.swing.JLabel jLabelmin;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField_desc;
+    private javax.swing.JTextField jTextField_id;
     private javax.swing.JTextField jTextField_mod;
     private javax.swing.JTextField jTextField_precio;
     private javax.swing.JTextField jTextField_stock;
